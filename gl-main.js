@@ -11,6 +11,7 @@ var globalAxes;
 var currSelection = 0;
 let housesCF = [];
 var timeStamp = 0;
+var frames = 0;
 
 const RING_ANGULAR_SPEED = 30;
 
@@ -198,12 +199,25 @@ function render() {
     let elapse = (now - timeStamp)/1000; /* convert to second */
     timeStamp = now;
     let ringSpinAngle = elapse * (RING_ANGULAR_SPEED / 60) * Math.PI * 2;
+    let tip = elapse * (20 / 60) * Math.PI * 2;
 
+    if (frames == 25) {
+        mat4.scale(housesCF[0], housesCF[0], vec3.fromValues(1.05, 1.05, 1.05));
+        let tipR = mat4.fromXRotation(mat4.create(), tip);
+        mat4.multiply(housesCF[0], housesCF[0], tipR);
+    }
 
-    mat4.rotateZ(housesCF[0], housesCF[0], ringSpinAngle);
-  //  mat4.scale(housesCF[0], housesCF[0], vec3.fromValues(.99, .99, .99));
-  //  mat4.scale(housesCF[0], housesCF[0], vec3.fromValues(1.1, 1.01, 1.01));
+    if (frames == 50) {
+        mat4.scale(housesCF[0], housesCF[0], vec3.fromValues(.95, .95, .95));
+        let tipL = mat4.fromXRotation(mat4.create(), - tip);
+        mat4.multiply(housesCF[0], housesCF[0], tipL);
+
+        frames = 0;
+    }
+
     mat4.rotateZ(housesCF[1], housesCF[1], ringSpinAngle);
+
+    frames++;
     requestAnimationFrame(render);
 }
 
