@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Transformation</title>
+  <script src="webgl-utils.js"></script>
+  <script src="shader-utils.js"></script>
+  <script src="gl-matrix-min.js"></script>
+  <script src="Axes.js"></script>
+  <script src="Cone.js"></script>
+  <script src="Cylinder.js"></script>
+  <script src="Cube.js"></script>
+  <script src="Ring.js"></script>
+  <script src="Sphere.js"></script>
+  <script src="Pineapple.js"></script>
+  <script src="SquidwardHouse.js"></script>
+  <script src="PatrickHouse.js"></script>
+  <script src="Floor.js"></script>
+  <script src="Torus.js"></script>
+  <script src="gl-main.js"></script>
+  <style>
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0px;
+    }
+    canvas {
+      display: block;
+    }
+    #intro {
+      margin: 8px;
+    }
+  </style>
+</head>
+<body onload="main()">
+<p>Nate Benson & Kaye Suarez</p>
+
+<select id="menu">
+  <option id="house0" value="0">Spongebob's House</option>
+  <option id="house1" value="1">Squidward's House</option>
+  <option id="house2" value="2">Patrick's House</option>
+</select>
+
+<label>
+    Number of Rows: 1 <input id="house-row" type="range" min="1" max="3" step="1" value="1"> 3
+    Number of Houses: 1 <input id="house-number" type="range" min="1" max="10" step="1" value="1"> 10
+</label>
+
+<ul> Keyboard Shortcuts
+  <li> Move x-axis: (Negative) x, (Positive) X</li>
+  <li> Move y-axis: (Negative) y, (Positive) Y</li>
+  <li> Move z-axis: (Negative) z, (Positive) Z</li>
+  <li> Rotate x-axis: (CCW) l, (CW) r</li>
+  <li> Rotate y-axis: (CCW) d, (CW) u</li>
+  <li> Rotate z-axis: (CCW) c, (CW) C</li>
+  <li> Scale: (Larger) +, (Smaller) -</li>
+</ul>
+
+<canvas id="gl-canvas"></canvas>
+  <div id="msg" style="text-align: center; font-size: 18pt"></div>
+</body>
+</html>
