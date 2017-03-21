@@ -9,9 +9,10 @@ var pineappleCF, statueCF, rockCF, floorCF, objCF;
 var axisBuff, tmpMat;
 var globalAxes;
 var currSelection = 0;
-var currObjName;
-let houses = [];
 let housesCF = [];
+var timeStamp = 0;
+
+const RING_ANGULAR_SPEED = 30;
 
 /* Vertex shader attribute variables */
 var posAttr, colAttr;
@@ -95,8 +96,10 @@ function main() {
 
             //THIRD HOUSE
             obj3 = new PatrickHouse(gl);
-           // houses.push(new PatrickHouse(gl));
-            
+            const trans2 = mat4.fromTranslation(mat4.create(), vec3.fromValues(0, -1, 0));
+            mat4.multiply(rockCF, trans2, rockCF);
+            housesCF.push(rockCF);
+
             floor = new Floor(gl);
             globalAxes = new Axes(gl);
 
@@ -139,22 +142,7 @@ function keyboardHandler(event) {
     const rotateXcw = mat4.fromXRotation(mat4.create(), - (coneSpinAngle * Math.PI/180.0));
     const rotateYccw = mat4.fromYRotation(mat4.create(), coneSpinAngle * Math.PI/180.0);
     const rotateYcw = mat4.fromYRotation(mat4.create(), - (coneSpinAngle * Math.PI/180.0));
-/*
-    switch (currSelection) {
-        case 0:
-            currObjName = document.getElementById("house0").innerText;
 
-            break;
-        case 1:
-            currObjName = document.getElementById("house1").innerText;
-            objCF = statueCF;
-            break;
-        case 2:
-            currObjName = document.getElementById("house2").innerText;
-            objCF = rockCF;
-            break;
-    }
-*/
     switch (event.key) {
         case "x":
             mat4.multiply(housesCF[currSelection], transXneg, housesCF[currSelection]);  // ringCF = Trans * ringCF
@@ -199,17 +187,23 @@ function keyboardHandler(event) {
             mat4.scale(housesCF[currSelection], housesCF[currSelection], vec3.fromValues(0.75, 0.75, 0.75));
             break;
     }
-    textOut.innerHTML = currObjName + " origin (" + objCF[12].toFixed(1) + ", "
-        + objCF[13].toFixed(1) + ", "
-        + objCF[14].toFixed(1) + ")";
 }
 
 function render() {
     gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
     draw3D();
     drawTopView();
-    /* looking at the XY plane, Z-axis points towards the viewer */
-    //coneSpinAngle += 1;  /* add 1 degree */
+
+    let now = Date.now();
+    let elapse = (now - timeStamp)/1000; /* convert to second */
+    timeStamp = now;
+    let ringSpinAngle = elapse * (RING_ANGULAR_SPEED / 60) * Math.PI * 2;
+
+
+    mat4.rotateZ(housesCF[0], housesCF[0], ringSpinAngle);
+  //  mat4.scale(housesCF[0], housesCF[0], vec3.fromValues(.99, .99, .99));
+  //  mat4.scale(housesCF[0], housesCF[0], vec3.fromValues(1.1, 1.01, 1.01));
+    mat4.rotateZ(housesCF[1], housesCF[1], ringSpinAngle);
     requestAnimationFrame(render);
 }
 
@@ -217,20 +211,14 @@ function drawScene() {
 
     floor.draw(posAttr, colAttr, modelUnif, floorCF);
 
-    mat4.fromTranslation(tmpMat, vec3.fromValues(0, 1, 0));
     mat4.multiply(tmpMat, pineappleCF, objCF);   // tmp = ringCF * tmpMat
     obj.draw(posAttr, colAttr, modelUnif, tmpMat);
 
-    mat4.fromTranslation(tmpMat, vec3.fromValues(0, 0, 0));
-    mat4.multiply(tmpMat, statueCF, tmpMat);   // tmp = ringCF * tmpMat
+    mat4.multiply(tmpMat, statueCF, objCF);   // tmp = ringCF * tmpMat
     obj2.draw(posAttr, colAttr, modelUnif, tmpMat);
 
-/*
-    //Draw Multiple Patrick Houses
-    mat4.fromTranslation(tmpMat, vec3.fromValues(xPos, yPos, 0));
-    mat4.multiply(tmpMat, rockCF, tmpMat);   // tmp = ringCF * tmpMat
-    obj3.draw(posAttr, colAttr, modelUnif, tmpMat);
-    */
+   // mat4.multiply(tmpMat, rockCF, objCF);   // tmp = ringCF * tmpMat
+   // obj3.draw(posAttr, colAttr, modelUnif, tmpMat);
 }
 
 function draw3D() {

@@ -2,14 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f5495991-527a-49b4-9f64-0cb0c74af5bc" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Torus.js" afterPath="$PROJECT_DIR$/Torus.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fshader.glsl" afterPath="$PROJECT_DIR$/fshader.glsl" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gl-main.js" afterPath="$PROJECT_DIR$/gl-main.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gl-main2.js" afterPath="$PROJECT_DIR$/gl-main2.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.html" afterPath="$PROJECT_DIR$/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index2.html" afterPath="$PROJECT_DIR$/index2.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/vshader.glsl" afterPath="$PROJECT_DIR$/vshader.glsl" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -27,20 +20,10 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="GeometricObject.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/GeometricObject.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-640">
-              <caret line="7" column="0" lean-forward="true" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="gl-main2.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/gl-main2.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-3675">
+            <state relative-caret-position="-3600">
               <caret line="59" column="3" lean-forward="false" selection-start-line="59" selection-start-column="3" selection-end-line="59" selection-end-column="3" />
               <folding />
             </state>
@@ -60,8 +43,8 @@
       <file leaf-file-name="gl-main.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/gl-main.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1915">
-              <caret line="98" column="12" lean-forward="false" selection-start-line="98" selection-start-column="12" selection-end-line="98" selection-end-column="12" />
+            <state relative-caret-position="210">
+              <caret line="195" column="0" lean-forward="false" selection-start-line="195" selection-start-column="0" selection-end-line="195" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -251,18 +234,18 @@
       <option name="presentableId" value="Default" />
       <updated>1490067923673</updated>
       <workItem from="1490067928567" duration="477000" />
-      <workItem from="1490112771626" duration="10062000" />
+      <workItem from="1490112771626" duration="13406000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="10539000" />
+    <option name="totallyTimeSpent" value="13883000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="6" y="26" width="1136" height="729" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21919014" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21919014" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -341,6 +324,14 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/vshader.glsl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="630">
+          <caret line="59" column="1" lean-forward="false" selection-start-line="59" selection-start-column="1" selection-end-line="59" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/GeometricObject.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-640">
@@ -365,22 +356,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/vshader.glsl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="630">
-          <caret line="59" column="1" lean-forward="false" selection-start-line="59" selection-start-column="1" selection-end-line="59" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gl-main2.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3675">
-          <caret line="59" column="3" lean-forward="false" selection-start-line="59" selection-start-column="3" selection-end-line="59" selection-end-column="3" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="278">
@@ -389,10 +364,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/gl-main2.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3600">
+          <caret line="59" column="3" lean-forward="false" selection-start-line="59" selection-start-column="3" selection-end-line="59" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/gl-main.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1915">
-          <caret line="98" column="12" lean-forward="false" selection-start-line="98" selection-start-column="12" selection-end-line="98" selection-end-column="12" />
+        <state relative-caret-position="210">
+          <caret line="195" column="0" lean-forward="false" selection-start-line="195" selection-start-column="0" selection-end-line="195" selection-end-column="0" />
           <folding />
         </state>
       </provider>
