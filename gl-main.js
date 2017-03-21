@@ -5,11 +5,13 @@
 var gl;
 var glCanvas, textOut;
 var orthoProjMat, persProjMat, viewMat, topViewMat, sideViewMat, ringCF;
-var pineappleCF, statueCF, rockCF, floorCF;
+var pineappleCF, statueCF, rockCF, floorCF, objCF;
 var axisBuff, tmpMat;
 var globalAxes;
 var currSelection = 0;
 var currObjName;
+let houses = [];
+let housesCF = [];
 
 /* Vertex shader attribute variables */
 var posAttr, colAttr;
@@ -60,6 +62,7 @@ function main() {
             rockCF = mat4.create();
             floorCF = mat4.create();
             tmpMat = mat4.create();
+            objCF = mat4.create();
             mat4.lookAt(viewMat,
                 vec3.fromValues(2, 2, 2), /* eye */
                 vec3.fromValues(0, 0, 0), /* focal point */
@@ -79,15 +82,24 @@ function main() {
             gl.uniformMatrix4fv(modelUnif, false, rockCF);
             gl.uniformMatrix4fv(modelUnif, false, ringCF);
 
+            //FIRST HOUSE
             obj = new Pineapple(gl);
+            const trans1 = mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 1, 0));
+            mat4.multiply(pineappleCF, trans1, pineappleCF);
+            housesCF.push(pineappleCF);
+
+            //SECOND HOUSE
             obj2 = new SquidwardHouse(gl);
+            housesCF.push(statueCF);
+
+
+            //THIRD HOUSE
             obj3 = new PatrickHouse(gl);
+           // houses.push(new PatrickHouse(gl));
+            
             floor = new Floor(gl);
             globalAxes = new Axes(gl);
 
-
-           // mat4.rotateX(pineappleCF, pineappleCF, Math.PI);
-            mat4.rotateX(ringCF, ringCF, -Math.PI / 2);
             coneSpinAngle = 10;
             resizeHandler();
             render();
@@ -127,13 +139,11 @@ function keyboardHandler(event) {
     const rotateXcw = mat4.fromXRotation(mat4.create(), - (coneSpinAngle * Math.PI/180.0));
     const rotateYccw = mat4.fromYRotation(mat4.create(), coneSpinAngle * Math.PI/180.0);
     const rotateYcw = mat4.fromYRotation(mat4.create(), - (coneSpinAngle * Math.PI/180.0));
-
-    let objCF = mat4.create();
-
+/*
     switch (currSelection) {
         case 0:
             currObjName = document.getElementById("house0").innerText;
-            objCF = pineappleCF;
+
             break;
         case 1:
             currObjName = document.getElementById("house1").innerText;
@@ -144,49 +154,49 @@ function keyboardHandler(event) {
             objCF = rockCF;
             break;
     }
-
+*/
     switch (event.key) {
         case "x":
-            mat4.multiply(objCF, transXneg, objCF);  // ringCF = Trans * ringCF
+            mat4.multiply(housesCF[currSelection], transXneg, housesCF[currSelection]);  // ringCF = Trans * ringCF
             break;
         case "X":
-            mat4.multiply(objCF, transXpos, objCF);  // ringCF = Trans * ringCF
+            mat4.multiply(housesCF[currSelection], transXpos, housesCF[currSelection]);  // ringCF = Trans * ringCF
             break;
         case "y":
-            mat4.multiply(objCF, transYneg, objCF);  // ringCF = Trans * ringCF
+            mat4.multiply(housesCF[currSelection], transYneg, housesCF[currSelection]);  // ringCF = Trans * ringCF
             break;
         case "Y":
-            mat4.multiply(objCF, transYpos, objCF);  // ringCF = Trans * ringCF
+            mat4.multiply(housesCF[currSelection], transYpos, housesCF[currSelection]);  // ringCF = Trans * ringCF
             break;
         case "z":
-            mat4.multiply(objCF, transZneg, objCF);  // ringCF = Trans * ringCF
+            mat4.multiply(housesCF[currSelection], transZneg, housesCF[currSelection]);  // ringCF = Trans * ringCF
             break;
         case "Z":
-            mat4.multiply(objCF, transZpos, objCF);  // ringCF = Trans * ringCF
+            mat4.multiply(housesCF[currSelection], transZpos, housesCF[currSelection]);  // ringCF = Trans * ringCF
             break;
         case "l":
-            mat4.multiply(objCF, objCF, rotateXccw);
+            mat4.multiply(housesCF[currSelection], housesCF[currSelection], rotateXccw);
             break;
         case "r":
-            mat4.multiply(objCF, objCF, rotateXcw);
+            mat4.multiply(housesCF[currSelection], housesCF[currSelection], rotateXcw);
             break;
         case "u":
-            mat4.multiply(objCF, objCF, rotateYcw);
+            mat4.multiply(housesCF[currSelection], housesCF[currSelection], rotateYcw);
             break;
         case "d":
-            mat4.multiply(objCF, objCF, rotateYccw);
+            mat4.multiply(housesCF[currSelection], housesCF[currSelection], rotateYccw);
             break;
         case "c":
-            mat4.multiply(objCF, objCF, rotateZccw);
+            mat4.multiply(housesCF[currSelection], housesCF[currSelection], rotateZccw);
             break;
         case "C":
-            mat4.multiply(objCF, objCF, rotateZcw);
+            mat4.multiply(housesCF[currSelection], housesCF[currSelection], rotateZcw);
             break;
         case "+":
-            mat4.scale(objCF, objCF, vec3.fromValues(1.05, 1.05, 1.05));
+            mat4.scale(housesCF[currSelection], housesCF[currSelection], vec3.fromValues(1.05, 1.05, 1.05));
             break;
         case "-":
-            mat4.scale(objCF, objCF, vec3.fromValues(0.75, 0.75, 0.75));
+            mat4.scale(housesCF[currSelection], housesCF[currSelection], vec3.fromValues(0.75, 0.75, 0.75));
             break;
     }
     textOut.innerHTML = currObjName + " origin (" + objCF[12].toFixed(1) + ", "
@@ -204,70 +214,23 @@ function render() {
 }
 
 function drawScene() {
-    let rowNum = document.getElementById("house-row").valueAsNumber;
-    let num = document.getElementById("house-number").valueAsNumber;
 
     floor.draw(posAttr, colAttr, modelUnif, floorCF);
 
-    //Draw Multiple Pineapple Houses
-    if (typeof obj !== 'undefined') {
-        var xPos;
-        var yPos;
-        var x = 0.5;
-        for (let j = 0; j < rowNum; j++) {
-            let row = j * x;
-            xPos = 0;
-            yPos = 1.5 + row;
+    mat4.fromTranslation(tmpMat, vec3.fromValues(0, 1, 0));
+    mat4.multiply(tmpMat, pineappleCF, objCF);   // tmp = ringCF * tmpMat
+    obj.draw(posAttr, colAttr, modelUnif, tmpMat);
 
-            for (let k = 0; k < num; k++) {
-                mat4.fromTranslation(tmpMat, vec3.fromValues(xPos, yPos, 0));
-                mat4.multiply(tmpMat, pineappleCF, tmpMat);   // tmp = ringCF * tmpMat
-                obj.draw(posAttr, colAttr, modelUnif, tmpMat);
-                xPos -= 0.5;
-                yPos -= 0.5;
-            }
-        }
-    }
+    mat4.fromTranslation(tmpMat, vec3.fromValues(0, 0, 0));
+    mat4.multiply(tmpMat, statueCF, tmpMat);   // tmp = ringCF * tmpMat
+    obj2.draw(posAttr, colAttr, modelUnif, tmpMat);
 
-    //Draw Multiple Squidward Houses
-    if (typeof obj2 !== 'undefined') {
-        var xPos;
-        var yPos;
-        var x = 0.5;
-        for (let j = 0; j < rowNum; j++) {
-            let row = j * x;
-            xPos = 0;
-            yPos = 0 + row;
-
-            for (let k = 0; k < num; k++) {
-                mat4.fromTranslation(tmpMat, vec3.fromValues(xPos, yPos, 0));
-                mat4.multiply(tmpMat, statueCF, tmpMat);   // tmp = ringCF * tmpMat
-                obj2.draw(posAttr, colAttr, modelUnif, tmpMat);
-                xPos -= 0.5;
-                yPos -= 0.5;
-            }
-        }
-    }
-
+/*
     //Draw Multiple Patrick Houses
-    if (typeof obj3 !== 'undefined') {
-        var xPos;
-        var yPos;
-        var x = 0.5;
-        for (let j = 0; j < rowNum; j++) {
-            let row = j * x;
-            xPos = 0;
-            yPos = -1.5 + row;
-
-            for (let k = 0; k < num; k++) {
-                mat4.fromTranslation(tmpMat, vec3.fromValues(xPos, yPos, 0));
-                mat4.multiply(tmpMat, rockCF, tmpMat);   // tmp = ringCF * tmpMat
-                obj3.draw(posAttr, colAttr, modelUnif, tmpMat);
-                xPos -= 0.5;
-                yPos -= 0.5;
-            }
-        }
-    }
+    mat4.fromTranslation(tmpMat, vec3.fromValues(xPos, yPos, 0));
+    mat4.multiply(tmpMat, rockCF, tmpMat);   // tmp = ringCF * tmpMat
+    obj3.draw(posAttr, colAttr, modelUnif, tmpMat);
+    */
 }
 
 function draw3D() {

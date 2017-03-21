@@ -94,6 +94,4 @@ class Torus {
             gl.drawElements(obj.primitive, obj.numPoints, gl.UNSIGNED_SHORT, 0);
         }
     }
-}/**
- * Created by kaye on 3/9/17.
- */
+}

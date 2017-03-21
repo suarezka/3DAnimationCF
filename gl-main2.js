@@ -190,7 +190,8 @@ function main() {
             gl.uniform1f(shininessUnif, shinySlider.value);
 
             gl.uniform3iv (isEnabledUnif, lightingComponentEnabled);
-            obj = new Torus(gl, 1.0, 0.3, 36, 24);
+            //obj = new Torus(gl, 1.0, 0.3, 36, 24);
+            obj = new SquidwardHouse(gl);
             let yellow = vec3.fromValues (0xe7/255, 0xf2/255, 0x4d/255);
             pointLight = new UniSphere(gl, 0.03, 3, yellow, yellow);
             globalAxes = new Axes(gl);
