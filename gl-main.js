@@ -5,7 +5,8 @@
 var gl;
 var glCanvas, textOut;
 var orthoProjMat, persProjMat, viewMat, topViewMat, sideViewMat, ringCF;
-var pineappleCF, statueCF, rockCF, floorCF, objCF;
+var viewMatInverse, topViewMatInverse, normalMat
+var pineappleCF, statueCF, rockCF, floorCF, lightCF, eyePos;
 var axisBuff, tmpMat;
 var globalAxes;
 var currSelection = 0;
@@ -16,17 +17,111 @@ var frames = 0;
 const RING_ANGULAR_SPEED = 30;
 
 /* Vertex shader attribute variables */
-var posAttr, colAttr;
+var posAttr, colAttr, normalAttr;
 
 /* Shader uniform variables */
-var projUnif, viewUnif, modelUnif;
+var projUnif, viewUnif, modelUnif, lightPosUnif;
+var objAmbientUnif, objTintUnif, normalUnif, isEnabledUnif;
+var ambCoeffUnif, diffCoeffUnif, specCoeffUnif, shininessUnif;
+var lightPos, useLightingUnif;
 
 const IDENTITY = mat4.create();
+var obj, lineBuff, normBuff, objTint, pointLight;
+var shaderProg, redrawNeeded, showNormal, showLightVectors;
+var lightingComponentEnabled = [true, true, true];
+
 var coneSpinAngle;
-var obj, obj2, obj3, floor;
-var shaderProg;
+var obj2, obj3, floor;
+
 
 function main() {
+
+    /* GET BUTTON VALUES */
+
+    let normalCheckBox = document.getElementById("shownormal");
+    normalCheckBox.addEventListener('change', ev => {
+        showNormal = ev.target.checked;
+        redrawNeeded = true;
+    }, false);
+
+    let lightCheckBox = document.getElementById("showlightvector");
+    lightCheckBox.addEventListener('change', ev => {
+        showLightVectors = ev.target.checked;
+        redrawNeeded = true;
+    }, false);
+
+
+    let ambientCheckBox = document.getElementById("enableAmbient");
+    ambientCheckBox.addEventListener('change', ev => {
+        lightingComponentEnabled[0] = ev.target.checked;
+        gl.uniform3iv (isEnabledUnif, lightingComponentEnabled);
+        redrawNeeded = true;
+    }, false);
+    let diffuseCheckBox = document.getElementById("enableDiffuse");
+    diffuseCheckBox.addEventListener('change', ev => {
+        lightingComponentEnabled[1] = ev.target.checked;
+        gl.uniform3iv (isEnabledUnif, lightingComponentEnabled);
+        redrawNeeded = true;
+    }, false);
+    let specularCheckBox = document.getElementById("enableSpecular");
+    specularCheckBox.addEventListener('change', ev => {
+        lightingComponentEnabled[2] = ev.target.checked;
+        gl.uniform3iv (isEnabledUnif, lightingComponentEnabled);
+        redrawNeeded = true;
+    }, false);
+    let ambCoeffSlider = document.getElementById("amb-coeff");
+    ambCoeffSlider.addEventListener('input', ev => {
+        gl.uniform1f(ambCoeffUnif, ev.target.value);
+        redrawNeeded = true;
+    }, false);
+    ambCoeffSlider.value = Math.random() * 0.2;
+    let diffCoeffSlider = document.getElementById("diff-coeff");
+    diffCoeffSlider.addEventListener('input', ev => {
+        gl.uniform1f(diffCoeffUnif, ev.target.value);
+        redrawNeeded = true;
+    }, false);
+    diffCoeffSlider.value = 0.5 + 0.5 * Math.random();  // random in [0.5, 1.0]
+    let specCoeffSlider = document.getElementById("spec-coeff");
+    specCoeffSlider.addEventListener('input', ev => {
+        gl.uniform1f(specCoeffUnif, ev.target.value);
+        redrawNeeded = true;
+    }, false);
+    specCoeffSlider.value = Math.random();
+    let shinySlider = document.getElementById("spec-shiny");
+    shinySlider.addEventListener('input', ev => {
+        gl.uniform1f(shininessUnif, ev.target.value);
+        redrawNeeded = true;
+    }, false);
+    shinySlider.value = Math.floor(1 + Math.random() * shinySlider.max);
+    let redSlider = document.getElementById("redslider");
+    let greenSlider = document.getElementById("greenslider");
+    let blueSlider = document.getElementById("blueslider");
+    redSlider.addEventListener('input', colorChanged, false);
+    greenSlider.addEventListener('input', colorChanged, false);
+    blueSlider.addEventListener('input', colorChanged, false);
+
+    let objxslider = document.getElementById("objx");
+    let objyslider = document.getElementById("objy");
+    let objzslider = document.getElementById("objz");
+    objxslider.addEventListener('input', objPosChanged, false);
+    objyslider.addEventListener('input', objPosChanged, false);
+    objzslider.addEventListener('input', objPosChanged, false);
+
+    let lightxslider = document.getElementById("lightx");
+    let lightyslider = document.getElementById("lighty");
+    let lightzslider = document.getElementById("lightz");
+    lightxslider.addEventListener('input', lightPosChanged, false);
+    lightyslider.addEventListener('input', lightPosChanged, false);
+    lightzslider.addEventListener('input', lightPosChanged, false);
+
+    let eyexslider = document.getElementById("eyex");
+    let eyeyslider = document.getElementById("eyey");
+    let eyezslider = document.getElementById("eyez");
+    eyexslider.addEventListener('input', eyePosChanged, false);
+    eyeyslider.addEventListener('input', eyePosChanged, false);
+    eyezslider.addEventListener('input', eyePosChanged, false);
+
+
     glCanvas = document.getElementById("gl-canvas");
     textOut = document.getElementById("msg");
     gl = WebGLUtils.setupWebGL(glCanvas, null);
@@ -41,29 +136,45 @@ function main() {
         .then(prog => {
             shaderProg = prog;
             gl.useProgram(prog);
-            gl.clearColor(0, 163/255, 230/255, 1);
+           // gl.clearColor(0, 163/255, 230/255, 1);
+            gl.clearColor(0.3, 0.3, 0.3, 1);
             gl.enable(gl.DEPTH_TEST);
             /* enable hidden surface removal */
             //gl.enable(gl.CULL_FACE);     /* cull back facing polygons */
             //gl.cullFace(gl.BACK);
             posAttr = gl.getAttribLocation(prog, "vertexPos");
             colAttr = gl.getAttribLocation(prog, "vertexCol");
+            normalAttr = gl.getAttribLocation(prog, "vertexNormal");
+            lightPosUnif = gl.getUniformLocation(prog, "lightPosWorld");
             projUnif = gl.getUniformLocation(prog, "projection");
             viewUnif = gl.getUniformLocation(prog, "view");
             modelUnif = gl.getUniformLocation(prog, "modelCF");
+            normalUnif = gl.getUniformLocation(prog, "normalMat");
+            useLightingUnif = gl.getUniformLocation (prog, "useLighting");
+            objTintUnif = gl.getUniformLocation(prog, "objectTint");
+            ambCoeffUnif = gl.getUniformLocation(prog, "ambientCoeff");
+            diffCoeffUnif = gl.getUniformLocation(prog, "diffuseCoeff");
+            specCoeffUnif = gl.getUniformLocation(prog, "specularCoeff");
+            shininessUnif = gl.getUniformLocation(prog, "shininess");
+            isEnabledUnif = gl.getUniformLocation(prog, "isEnabled");
             gl.enableVertexAttribArray(posAttr);
-            gl.enableVertexAttribArray(colAttr);
+           // gl.enableVertexAttribArray(colAttr);
             orthoProjMat = mat4.create();
             persProjMat = mat4.create();
             viewMat = mat4.create();
+            viewMatInverse = mat4.create();
             topViewMat = mat4.create();
+            topViewMatInverse = mat4.create();
             sideViewMat = mat4.create();
             ringCF = mat4.create();
             pineappleCF = mat4.create();
             statueCF = mat4.create();
             rockCF = mat4.create();
             floorCF = mat4.create();
+            normalMat = mat3.create();
+            lightCF = mat4.create();
             tmpMat = mat4.create();
+            eyePos = vec3.fromValues(3, 2, 3);
             objCF = mat4.create();
             mat4.lookAt(viewMat,
                 vec3.fromValues(2, 2, 2), /* eye */
@@ -101,10 +212,40 @@ function main() {
             mat4.multiply(rockCF, trans2, rockCF);
             housesCF.push(rockCF);
 
+            lightPos = vec3.fromValues(0, 2, 2);
+            eyexslider.value = lightPos[0];
+            eyeyslider.value = lightPos[1];
+            eyezslider.value = lightPos[2];
+            mat4.fromTranslation(lightCF, lightPos);
+            lightx.value = lightPos[0];
+            lighty.value = lightPos[1];
+            lightz.value = lightPos[2];
+            gl.uniform3fv (lightPosUnif, lightPos);
+            let vertices = [0, 0, 0, 1, 1, 1,
+                lightPos[0], 0, 0, 1, 1, 1,
+                lightPos[0], lightPos[1], 0, 1, 1, 1,
+                lightPos[0], lightPos[1], lightPos[2], 1, 1, 1];
+            gl.bindBuffer(gl.ARRAY_BUFFER, lineBuff);
+            gl.bufferData(gl.ARRAY_BUFFER, Float32Array.from(vertices), gl.STATIC_DRAW);
+
+            redSlider.value = Math.random();
+            greenSlider.value = Math.random();
+            blueSlider.value = Math.random();
+            objTint = vec3.fromValues(redSlider.value, greenSlider.value, blueSlider.value);
+            gl.uniform3fv(objTintUnif, objTint);
+            gl.uniform1f(ambCoeffUnif, ambCoeffSlider.value);
+            gl.uniform1f(diffCoeffUnif, diffCoeffSlider.value);
+            gl.uniform1f(specCoeffUnif, specCoeffSlider.value);
+            gl.uniform1f(shininessUnif, shinySlider.value);
+
+            gl.uniform3iv (isEnabledUnif, lightingComponentEnabled);
+            let yellow = vec3.fromValues (0xe7/255, 0xf2/255, 0x4d/255);
+            pointLight = new UniSphere(gl, 0.03, 3, yellow, yellow);
+
             floor = new Floor(gl);
             globalAxes = new Axes(gl);
-
             coneSpinAngle = 10;
+            redrawNeeded = true;
             resizeHandler();
             render();
         });
@@ -130,13 +271,6 @@ function resizeHandler() {
 }
 
 function keyboardHandler(event) {
-    const transXpos = mat4.fromTranslation(mat4.create(), vec3.fromValues(1, 0, 0));
-    const transXneg = mat4.fromTranslation(mat4.create(), vec3.fromValues(-1, 0, 0));
-    const transYpos = mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 1, 0));
-    const transYneg = mat4.fromTranslation(mat4.create(), vec3.fromValues(0, -1, 0));
-    const transZpos = mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 0, 1));
-    const transZneg = mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 0, -1));
-
     const rotateZccw = mat4.fromZRotation(mat4.create(), coneSpinAngle * Math.PI/180.0);
     const rotateZcw = mat4.fromZRotation(mat4.create(), - (coneSpinAngle * Math.PI/180.0));
     const rotateXccw = mat4.fromXRotation(mat4.create(), coneSpinAngle * Math.PI/180.0);
@@ -146,39 +280,21 @@ function keyboardHandler(event) {
 
     switch (event.key) {
         case "x":
-            mat4.multiply(housesCF[currSelection], transXneg, housesCF[currSelection]);  // ringCF = Trans * ringCF
-            break;
-        case "X":
-            mat4.multiply(housesCF[currSelection], transXpos, housesCF[currSelection]);  // ringCF = Trans * ringCF
-            break;
-        case "y":
-            mat4.multiply(housesCF[currSelection], transYneg, housesCF[currSelection]);  // ringCF = Trans * ringCF
-            break;
-        case "Y":
-            mat4.multiply(housesCF[currSelection], transYpos, housesCF[currSelection]);  // ringCF = Trans * ringCF
-            break;
-        case "z":
-            mat4.multiply(housesCF[currSelection], transZneg, housesCF[currSelection]);  // ringCF = Trans * ringCF
-            break;
-        case "Z":
-            mat4.multiply(housesCF[currSelection], transZpos, housesCF[currSelection]);  // ringCF = Trans * ringCF
-            break;
-        case "l":
             mat4.multiply(housesCF[currSelection], housesCF[currSelection], rotateXccw);
             break;
-        case "r":
+        case "X":
             mat4.multiply(housesCF[currSelection], housesCF[currSelection], rotateXcw);
             break;
-        case "u":
+        case "y":
             mat4.multiply(housesCF[currSelection], housesCF[currSelection], rotateYcw);
             break;
-        case "d":
+        case "Y":
             mat4.multiply(housesCF[currSelection], housesCF[currSelection], rotateYccw);
             break;
-        case "c":
+        case "z":
             mat4.multiply(housesCF[currSelection], housesCF[currSelection], rotateZccw);
             break;
-        case "C":
+        case "Z":
             mat4.multiply(housesCF[currSelection], housesCF[currSelection], rotateZcw);
             break;
         case "+":
@@ -222,8 +338,24 @@ function render() {
 }
 
 function drawScene() {
+    gl.uniform1i (useLightingUnif, false);
+    gl.disableVertexAttribArray(normalAttr);
+    gl.enableVertexAttribArray(colAttr);
 
-    floor.draw(posAttr, colAttr, modelUnif, floorCF);
+    /* Use LINE_STRIP to mark light position */
+    gl.uniformMatrix4fv(modelUnif, false, IDENTITY);
+    gl.bindBuffer(gl.ARRAY_BUFFER, lineBuff);
+    gl.vertexAttribPointer(posAttr, 3, gl.FLOAT, false, 24, 0);
+    gl.vertexAttribPointer(colAttr, 3, gl.FLOAT, false, 24, 12);
+    gl.drawArrays(gl.LINE_STRIP, 0, 4);
+
+    /* draw the global coordinate frame */
+    globalAxes.draw(posAttr, colAttr, modelUnif, IDENTITY);
+
+    /* Draw the light source (a sphere) using its own coordinate frame */
+    pointLight.draw(posAttr, colAttr, modelUnif, lightCF);
+
+    //floor.draw(posAttr, colAttr, modelUnif, floorCF);
 
     mat4.multiply(tmpMat, pineappleCF, objCF);   // tmp = ringCF * tmpMat
     obj.draw(posAttr, colAttr, modelUnif, tmpMat);
@@ -233,6 +365,99 @@ function drawScene() {
 
    // mat4.multiply(tmpMat, rockCF, objCF);   // tmp = ringCF * tmpMat
    // obj3.draw(posAttr, colAttr, modelUnif, tmpMat);
+}
+
+function ambColorChanged(ev) {
+    switch (ev.target.id) {
+        case 'r-amb-slider':
+            objAmbient[0] = ev.target.value;
+            break;
+        case 'g-amb-slider':
+            objAmbient[1] = ev.target.value;
+            break;
+        case 'b-amb-slider':
+            objAmbient[2] = ev.target.value;
+            break;
+    }
+    gl.uniform3fv(objAmbientUnif, objAmbient);
+    redrawNeeded = true;
+}
+
+function colorChanged(ev) {
+    switch (ev.target.id) {
+        case 'redslider':
+            objTint[0] = ev.target.value;
+            break;
+        case 'greenslider':
+            objTint[1] = ev.target.value;
+            break;
+        case 'blueslider':
+            objTint[2] = ev.target.value;
+            break;
+    }
+    gl.uniform3fv(objTintUnif, objTint);
+    redrawNeeded = true;
+}
+
+function lightPosChanged(ev) {
+    switch (ev.target.id) {
+        case 'lightx':
+            lightPos[0] = ev.target.value;
+            break;
+        case 'lighty':
+            lightPos[1] = ev.target.value;
+            break;
+        case 'lightz':
+            lightPos[2] = ev.target.value;
+            break;
+    }
+    mat4.fromTranslation(lightCF, lightPos);
+    gl.uniform3fv (lightPosUnif, lightPos);
+    let vertices = [
+        0, 0, 0, 1, 1, 1,
+        lightPos[0], 0, 0, 1, 1, 1,
+        lightPos[0], lightPos[1], 0, 1, 1, 1,
+        lightPos[0], lightPos[1], lightPos[2], 1, 1, 1];
+    gl.bindBuffer(gl.ARRAY_BUFFER, lineBuff);
+    gl.bufferData(gl.ARRAY_BUFFER, Float32Array.from(vertices), gl.STATIC_DRAW);
+    redrawNeeded = true;
+}
+
+
+function objPosChanged(ev) {
+
+    switch (ev.target.id) {
+        case 'objx':
+            housesCF[currSelection][12] = ev.target.value;
+            break;
+        case 'objy':
+            housesCF[currSelection][13] = ev.target.value;
+            break;
+        case 'objz':
+            housesCF[currSelection][14] = ev.target.value;
+            break;
+    }
+    redrawNeeded = true;
+}
+
+function eyePosChanged(ev) {
+    switch (ev.target.id) {
+        case 'eyex':
+            eyePos[0] = ev.target.value;
+            break;
+        case 'eyey':
+            eyePos[1] = ev.target.value;
+            break;
+        case 'eyez':
+            eyePos[2] = ev.target.value;
+            break;
+    }
+    mat4.lookAt(viewMat,
+        eyePos,
+        vec3.fromValues(0, 0, 0), /* focal point */
+        vec3.fromValues(0, 0, 1)); /* up */
+    mat4.invert (viewMatInverse, viewMat);
+    redrawNeeded = true;
 }
 
 function draw3D() {
