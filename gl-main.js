@@ -4,12 +4,13 @@
 
 var gl;
 var glCanvas, textOut;
-var orthoProjMat, persProjMat, viewMat, topViewMat, sideViewMat, ringCF;
+var orthoProjMat, persProjMat, viewMat, topViewMat, sideViewMat, objCF;
 var viewMatInverse, topViewMatInverse, normalMat
 var pineappleCF, statueCF, rockCF, floorCF, lightCF, eyePos;
 var axisBuff, tmpMat;
 var globalAxes;
 var currSelection = 0;
+let houses = [];
 let housesCF = [];
 var timeStamp = 0;
 var frames = 0;
@@ -140,8 +141,11 @@ function main() {
             gl.clearColor(0.3, 0.3, 0.3, 1);
             gl.enable(gl.DEPTH_TEST);
             /* enable hidden surface removal */
-            //gl.enable(gl.CULL_FACE);     /* cull back facing polygons */
-            //gl.cullFace(gl.BACK);
+            gl.enable(gl.CULL_FACE);     /* cull back facing polygons */
+            gl.cullFace(gl.BACK);
+            axisBuff = gl.createBuffer();
+            lineBuff = gl.createBuffer();
+            normBuff = gl.createBuffer();
             posAttr = gl.getAttribLocation(prog, "vertexPos");
             colAttr = gl.getAttribLocation(prog, "vertexCol");
             normalAttr = gl.getAttribLocation(prog, "vertexNormal");
@@ -176,11 +180,12 @@ function main() {
             tmpMat = mat4.create();
             eyePos = vec3.fromValues(3, 2, 3);
             objCF = mat4.create();
-            mat4.lookAt(viewMat,
-                vec3.fromValues(2, 2, 2), /* eye */
-                vec3.fromValues(0, 0, 0), /* focal point */
+
+           /*mat4.lookAt(viewMat,
+                vec3.fromValues(2, 2, 2), /!* eye *!/
+                vec3.fromValues(0, 0, 0), /!* focal point *!/
                 vec3.fromValues(0, 0, 1));
-            /* up */
+            /!* up *!/
             mat4.lookAt(topViewMat,
                 vec3.fromValues(0, 0, 2),
                 vec3.fromValues(0, 0, 0),
@@ -188,7 +193,19 @@ function main() {
             mat4.lookAt(sideViewMat,
                 vec3.fromValues(2, 0, 0),
                 vec3.fromValues(0, 0, 0),
-                vec3.fromValues(0, 0, 1));
+                vec3.fromValues(0, 0, 1));*/
+
+            mat4.lookAt(viewMat,
+                eyePos,
+                vec3.fromValues(0, 0, 0), /* focal point */
+                vec3.fromValues(0, 0, 1)); /* up */
+            mat4.invert (viewMatInverse, viewMat);
+            mat4.lookAt(topViewMat,
+                vec3.fromValues(0,0,2),
+                vec3.fromValues(0,0,0),
+                vec3.fromValues(0,1,0)
+            );
+
 
             gl.uniformMatrix4fv(modelUnif, false, pineappleCF);
             gl.uniformMatrix4fv(modelUnif, false, statueCF);
@@ -196,21 +213,14 @@ function main() {
             gl.uniformMatrix4fv(modelUnif, false, ringCF);
 
             //FIRST HOUSE
-            obj = new Pineapple(gl);
+            houses.push(new Pineapple(gl));
             const trans1 = mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 1, 0));
             mat4.multiply(pineappleCF, trans1, pineappleCF);
             housesCF.push(pineappleCF);
 
             //SECOND HOUSE
-            obj2 = new SquidwardHouse(gl);
+            houses.push(new SquidwardHouse(gl));
             housesCF.push(statueCF);
-
-
-            //THIRD HOUSE
-            obj3 = new PatrickHouse(gl);
-            const trans2 = mat4.fromTranslation(mat4.create(), vec3.fromValues(0, -1, 0));
-            mat4.multiply(rockCF, trans2, rockCF);
-            housesCF.push(rockCF);
 
             lightPos = vec3.fromValues(0, 2, 2);
             eyexslider.value = lightPos[0];
@@ -307,34 +317,37 @@ function keyboardHandler(event) {
 }
 
 function render() {
-    gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
-    draw3D();
-    drawTopView();
 
-    let now = Date.now();
-    let elapse = (now - timeStamp)/1000; /* convert to second */
-    timeStamp = now;
-    let ringSpinAngle = elapse * (RING_ANGULAR_SPEED / 60) * Math.PI * 2;
-    let tip = elapse * (20 / 60) * Math.PI * 2;
+        gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
+        draw3D();
+        drawTopView();
 
-    if (frames == 25) {
-        mat4.scale(housesCF[0], housesCF[0], vec3.fromValues(1.05, 1.05, 1.05));
-        let tipR = mat4.fromXRotation(mat4.create(), tip);
-        mat4.multiply(housesCF[0], housesCF[0], tipR);
-    }
+        let now = Date.now();
+        let elapse = (now - timeStamp) / 1000;
+        /* convert to second */
+        timeStamp = now;
+        let ringSpinAngle = elapse * (RING_ANGULAR_SPEED / 60) * Math.PI * 2;
+        let tip = elapse * (20 / 60) * Math.PI * 2;
 
-    if (frames == 50) {
-        mat4.scale(housesCF[0], housesCF[0], vec3.fromValues(.95, .95, .95));
-        let tipL = mat4.fromXRotation(mat4.create(), - tip);
-        mat4.multiply(housesCF[0], housesCF[0], tipL);
+        if (frames == 25) {
+            mat4.scale(housesCF[0], housesCF[0], vec3.fromValues(1.05, 1.05, 1.05));
+            let tipR = mat4.fromXRotation(mat4.create(), tip);
+            mat4.multiply(housesCF[0], housesCF[0], tipR);
+        }
 
-        frames = 0;
-    }
+        if (frames == 50) {
+            mat4.scale(housesCF[0], housesCF[0], vec3.fromValues(.95, .95, .95));
+            let tipL = mat4.fromXRotation(mat4.create(), -tip);
+            mat4.multiply(housesCF[0], housesCF[0], tipL);
 
-    mat4.rotateZ(housesCF[1], housesCF[1], ringSpinAngle);
+            frames = 0;
+        }
 
-    frames++;
-    requestAnimationFrame(render);
+        mat4.rotateZ(housesCF[1], housesCF[1], ringSpinAngle);
+
+        frames++;
+        requestAnimationFrame(render);
+
 }
 
 function drawScene() {
@@ -357,11 +370,23 @@ function drawScene() {
 
     //floor.draw(posAttr, colAttr, modelUnif, floorCF);
 
-    mat4.multiply(tmpMat, pineappleCF, objCF);   // tmp = ringCF * tmpMat
-    obj.draw(posAttr, colAttr, modelUnif, tmpMat);
+    if (typeof houses[0] !== 'undefined') {
+        /* calculate normal matrix from ringCF */
+        gl.uniform1i (useLightingUnif, true);
+        gl.disableVertexAttribArray(colAttr);
+        gl.enableVertexAttribArray(normalAttr);
+        mat4.multiply(tmpMat, pineappleCF, objCF);   // tmp = ringCF * tmpMat
+        houses[0].draw(posAttr, normalAttr, modelUnif, tmpMat);
+    }
 
-    mat4.multiply(tmpMat, statueCF, objCF);   // tmp = ringCF * tmpMat
-    obj2.draw(posAttr, colAttr, modelUnif, tmpMat);
+    if (typeof houses[1] !== 'undefined') {
+        /* calculate normal matrix from ringCF */
+        gl.uniform1i (useLightingUnif, true);
+        gl.disableVertexAttribArray(colAttr);
+        gl.enableVertexAttribArray(normalAttr);
+        mat4.multiply(tmpMat, statueCF, objCF);   // tmp = ringCF * tmpMat
+        houses[1].draw(posAttr, normalAttr, modelUnif, tmpMat);
+    }
 
    // mat4.multiply(tmpMat, rockCF, objCF);   // tmp = ringCF * tmpMat
    // obj3.draw(posAttr, colAttr, modelUnif, tmpMat);
@@ -465,6 +490,20 @@ function draw3D() {
     gl.uniformMatrix4fv(projUnif, false, persProjMat);
     gl.uniformMatrix4fv(viewUnif, false, viewMat);
     gl.viewport(0, 0, glCanvas.width / 2, glCanvas.height);
+    mat4.mul (tmpMat, viewMat, ringCF);
+    mat3.normalFromMat4 (normalMat, tmpMat);
+    gl.uniformMatrix3fv (normalUnif, false, normalMat);
+    gl.viewport(0, 0, glCanvas.width/2, glCanvas.height);
+    drawScene();
+    if (typeof houses !== 'undefined') {
+        gl.uniform1i(useLightingUnif, false);
+        gl.disableVertexAttribArray(normalAttr);
+        gl.enableVertexAttribArray(colAttr);
+        if (showNormal)
+            obj.drawNormal(posAttr, colAttr, modelUnif, ringCF);
+        if (showLightVectors)
+            obj.drawVectorsTo(gl, lightPos, posAttr, colAttr, modelUnif, ringCF);
+    }
     drawScene();
 }
 
@@ -481,6 +520,10 @@ function drawSideView() {
     gl.uniformMatrix4fv(projUnif, false, orthoProjMat);
     gl.uniformMatrix4fv(viewUnif, false, sideViewMat);
     gl.viewport(glCanvas.width / 2, 0, glCanvas.width / 2, glCanvas.height);
+    mat4.mul (tmpMat, topViewMat, ringCF);
+    mat3.normalFromMat4 (normalMat, tmpMat);
+    gl.uniformMatrix3fv (normalUnif, false, normalMat);
+    gl.viewport(glCanvas.width/2, 0, glCanvas.width/2, glCanvas.height);
     drawScene();
 }
 
