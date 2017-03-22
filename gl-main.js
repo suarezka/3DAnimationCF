@@ -5,9 +5,9 @@
 var gl;
 var glCanvas, textOut;
 var orthoProjMat, persProjMat, viewMat, topViewMat, sideViewMat, objCF;
-var viewMatInverse, topViewMatInverse, normalMat
+var viewMatInverse, topViewMatInverse, normalMat, normalMat2;
 var pineappleCF, statueCF, rockCF, floorCF, lightCF, eyePos;
-var axisBuff, tmpMat;
+var axisBuff, tmpMat, tmpMat2;
 var globalAxes;
 var currSelection = 0;
 let houses = [];
@@ -176,8 +176,10 @@ function main() {
             rockCF = mat4.create();
             floorCF = mat4.create();
             normalMat = mat3.create();
+            normalMat2 = mat3.create();
             lightCF = mat4.create();
             tmpMat = mat4.create();
+            tmpMat2 = mat4.create();
             eyePos = vec3.fromValues(3, 2, 3);
             objCF = mat4.create();
 
@@ -206,6 +208,8 @@ function main() {
                 vec3.fromValues(0,1,0)
             );
 
+            mat4.invert (topViewMatInverse, topViewMat);
+            gl.uniformMatrix4fv(modelUnif, false, IDENTITY);
 
             gl.uniformMatrix4fv(modelUnif, false, pineappleCF);
             gl.uniformMatrix4fv(modelUnif, false, statueCF);
@@ -322,9 +326,9 @@ function render() {
         draw3D();
         drawTopView();
 
-        let now = Date.now();
+/*        let now = Date.now();
         let elapse = (now - timeStamp) / 1000;
-        /* convert to second */
+        /!* convert to second *!/
         timeStamp = now;
         let ringSpinAngle = elapse * (RING_ANGULAR_SPEED / 60) * Math.PI * 2;
         let tip = elapse * (20 / 60) * Math.PI * 2;
@@ -345,7 +349,7 @@ function render() {
 
         mat4.rotateZ(housesCF[1], housesCF[1], ringSpinAngle);
 
-        frames++;
+        frames++;*/
         requestAnimationFrame(render);
 
 }
@@ -490,7 +494,9 @@ function draw3D() {
     gl.uniformMatrix4fv(projUnif, false, persProjMat);
     gl.uniformMatrix4fv(viewUnif, false, viewMat);
     gl.viewport(0, 0, glCanvas.width / 2, glCanvas.height);
-    mat4.mul (tmpMat, viewMat, ringCF);
+
+ //   mat4.mul (tmpMat2, viewMat, housesCF[0]);
+    mat4.mul (tmpMat, viewMat, housesCF[1]);
     mat3.normalFromMat4 (normalMat, tmpMat);
     gl.uniformMatrix3fv (normalUnif, false, normalMat);
     gl.viewport(0, 0, glCanvas.width/2, glCanvas.height);
@@ -504,7 +510,6 @@ function draw3D() {
         if (showLightVectors)
             obj.drawVectorsTo(gl, lightPos, posAttr, colAttr, modelUnif, ringCF);
     }
-    drawScene();
 }
 
 function drawTopView() {

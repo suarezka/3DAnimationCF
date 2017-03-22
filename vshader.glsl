@@ -6,6 +6,7 @@ uniform mat4 projection;
 uniform mat4 view;
 uniform mat4 modelCF;
 uniform mat3 normalMat;
+uniform mat3 normalMat2;
 
 uniform vec3 lightPosWorld;
 uniform float diffuseCoeff;
