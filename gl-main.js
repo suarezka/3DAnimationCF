@@ -81,7 +81,7 @@ function main() {
         gl.uniform1f(diffCoeffUnif, ev.target.value);
         redrawNeeded = true;
     }, false);
-    diffCoeffSlider.value = 0.5 + 0.5 * Math.random();  // random in [0.5, 1.0]
+    diffCoeffSlider.value = 0.5 + 0.5 * Math.random(); // random in [0.5, 1.0]
     let specCoeffSlider = document.getElementById("spec-coeff");
     specCoeffSlider.addEventListener('input', ev => {
         gl.uniform1f(specCoeffUnif, ev.target.value);
@@ -162,6 +162,7 @@ function main() {
             shininessUnif = gl.getUniformLocation(prog, "shininess");
             isEnabledUnif = gl.getUniformLocation(prog, "isEnabled");
             gl.enableVertexAttribArray(posAttr);
+
            // gl.enableVertexAttribArray(colAttr);
             orthoProjMat = mat4.create();
             persProjMat = mat4.create();
@@ -246,6 +247,7 @@ function main() {
             greenSlider.value = Math.random();
             blueSlider.value = Math.random();
             objTint = vec3.fromValues(redSlider.value, greenSlider.value, blueSlider.value);
+
             gl.uniform3fv(objTintUnif, objTint);
             gl.uniform1f(ambCoeffUnif, ambCoeffSlider.value);
             gl.uniform1f(diffCoeffUnif, diffCoeffSlider.value);
@@ -413,6 +415,7 @@ function ambColorChanged(ev) {
 }
 
 function colorChanged(ev) {
+    /*
     switch (ev.target.id) {
         case 'redslider':
             objTint[0] = ev.target.value;
@@ -426,6 +429,7 @@ function colorChanged(ev) {
     }
     gl.uniform3fv(objTintUnif, objTint);
     redrawNeeded = true;
+    */
 }
 
 function lightPosChanged(ev) {
