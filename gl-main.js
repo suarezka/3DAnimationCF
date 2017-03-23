@@ -22,7 +22,7 @@ var posAttr, colAttr, normalAttr;
 
 /* Shader uniform variables */
 var projUnif, viewUnif, modelUnif, lightPosUnif;
-var objAmbientUnif, objTintUnif, normalUnif, isEnabledUnif;
+var objAmbientUnif, objTintUnif, normalUnif, normalUnif2, isEnabledUnif;
 var ambCoeffUnif, diffCoeffUnif, specCoeffUnif, shininessUnif;
 var lightPos, useLightingUnif;
 
@@ -208,24 +208,8 @@ function main() {
                 vec3.fromValues(0,0,0),
                 vec3.fromValues(0,1,0)
             );
-
             mat4.invert (topViewMatInverse, topViewMat);
             gl.uniformMatrix4fv(modelUnif, false, IDENTITY);
-
-            gl.uniformMatrix4fv(modelUnif, false, pineappleCF);
-            gl.uniformMatrix4fv(modelUnif, false, statueCF);
-            gl.uniformMatrix4fv(modelUnif, false, rockCF);
-            gl.uniformMatrix4fv(modelUnif, false, ringCF);
-
-            //FIRST HOUSE
-            houses.push(new Pineapple(gl));
-            const trans1 = mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 1, 0));
-            mat4.multiply(pineappleCF, trans1, pineappleCF);
-            housesCF.push(pineappleCF);
-
-            //SECOND HOUSE
-            houses.push(new SquidwardHouse(gl));
-            housesCF.push(statueCF);
 
             lightPos = vec3.fromValues(0, 2, 2);
             eyexslider.value = lightPos[0];
@@ -243,6 +227,11 @@ function main() {
             gl.bindBuffer(gl.ARRAY_BUFFER, lineBuff);
             gl.bufferData(gl.ARRAY_BUFFER, Float32Array.from(vertices), gl.STATIC_DRAW);
 
+            gl.uniformMatrix4fv(modelUnif, false, pineappleCF);
+            gl.uniformMatrix4fv(modelUnif, false, statueCF);
+            gl.uniformMatrix4fv(modelUnif, false, rockCF);
+            //gl.uniformMatrix4fv(modelUnif, false, ringCF);
+
             redSlider.value = Math.random();
             greenSlider.value = Math.random();
             blueSlider.value = Math.random();
@@ -255,12 +244,25 @@ function main() {
             gl.uniform1f(shininessUnif, shinySlider.value);
 
             gl.uniform3iv (isEnabledUnif, lightingComponentEnabled);
+
+            //FIRST HOUSE
+            // houses.push(new Pineapple(gl));
+            // const trans1 = mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 1, 0));
+            // mat4.multiply(pineappleCF, trans1, pineappleCF);
+            // housesCF.push(pineappleCF);
+            //
+            // //SECOND HOUSE
+            // houses.push(new SquidwardHouse(gl));
+            // housesCF.push(statueCF);
+            obj = new Pineapple(gl);
+            obj2 = new SquidwardHouse(gl);
+
             let yellow = vec3.fromValues (0xe7/255, 0xf2/255, 0x4d/255);
             pointLight = new UniSphere(gl, 0.03, 3, yellow, yellow);
 
             floor = new Floor(gl);
             globalAxes = new Axes(gl);
-            coneSpinAngle = 10;
+            //coneSpinAngle = 10;
             redrawNeeded = true;
             resizeHandler();
             render();
@@ -278,8 +280,8 @@ function resizeHandler() {
             Math.PI / 3, /* 60 degrees vertical field of view */
             1 / ratio, /* must be width/height ratio */
             1, /* near plane at Z=1 */
-            20);
-        /* far plane at Z=20 */
+            20); /* far plane at Z=20 */
+        redrawNeeded = true;
     } else {
         alert("Window is too narrow!");
     }
@@ -323,36 +325,37 @@ function keyboardHandler(event) {
 }
 
 function render() {
-
+    if(redrawNeeded) {
         gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
         draw3D();
         drawTopView();
+        redrawNeeded = false;
+        /*        let now = Date.now();
+         let elapse = (now - timeStamp) / 1000;
+         /!* convert to second *!/
+         timeStamp = now;
+         let ringSpinAngle = elapse * (RING_ANGULAR_SPEED / 60) * Math.PI * 2;
+         let tip = elapse * (20 / 60) * Math.PI * 2;
 
-/*        let now = Date.now();
-        let elapse = (now - timeStamp) / 1000;
-        /!* convert to second *!/
-        timeStamp = now;
-        let ringSpinAngle = elapse * (RING_ANGULAR_SPEED / 60) * Math.PI * 2;
-        let tip = elapse * (20 / 60) * Math.PI * 2;
+         if (frames == 25) {
+         mat4.scale(housesCF[0], housesCF[0], vec3.fromValues(1.05, 1.05, 1.05));
+         let tipR = mat4.fromXRotation(mat4.create(), tip);
+         mat4.multiply(housesCF[0], housesCF[0], tipR);
+         }
 
-        if (frames == 25) {
-            mat4.scale(housesCF[0], housesCF[0], vec3.fromValues(1.05, 1.05, 1.05));
-            let tipR = mat4.fromXRotation(mat4.create(), tip);
-            mat4.multiply(housesCF[0], housesCF[0], tipR);
-        }
+         if (frames == 50) {
+         mat4.scale(housesCF[0], housesCF[0], vec3.fromValues(.95, .95, .95));
+         let tipL = mat4.fromXRotation(mat4.create(), -tip);
+         mat4.multiply(housesCF[0], housesCF[0], tipL);
 
-        if (frames == 50) {
-            mat4.scale(housesCF[0], housesCF[0], vec3.fromValues(.95, .95, .95));
-            let tipL = mat4.fromXRotation(mat4.create(), -tip);
-            mat4.multiply(housesCF[0], housesCF[0], tipL);
+         frames = 0;
+         }
 
-            frames = 0;
-        }
+         mat4.rotateZ(housesCF[1], housesCF[1], ringSpinAngle);
 
-        mat4.rotateZ(housesCF[1], housesCF[1], ringSpinAngle);
-
-        frames++;*/
-        requestAnimationFrame(render);
+         frames++;*/
+    }
+    requestAnimationFrame(render);
 
 }
 
@@ -376,22 +379,23 @@ function drawScene() {
 
     //floor.draw(posAttr, colAttr, modelUnif, floorCF);
 
-    if (typeof houses[0] !== 'undefined') {
+    if (typeof obj !== 'undefined') {
         /* calculate normal matrix from ringCF */
         gl.uniform1i (useLightingUnif, true);
         gl.disableVertexAttribArray(colAttr);
         gl.enableVertexAttribArray(normalAttr);
-        mat4.multiply(tmpMat, pineappleCF, objCF);   // tmp = ringCF * tmpMat
-        houses[0].draw(posAttr, normalAttr, modelUnif, tmpMat);
+        mat4.fromTranslation(tmpMat, vec3.fromValues(0, 1, 0));
+        mat4.multiply(tmpMat, pineappleCF, tmpMat);   // tmp = ringCF * tmpMat
+        obj.draw(posAttr, normalAttr, modelUnif, tmpMat);
     }
 
-    if (typeof houses[1] !== 'undefined') {
+    if (typeof obj2 !== 'undefined') {
         /* calculate normal matrix from ringCF */
         gl.uniform1i (useLightingUnif, true);
         gl.disableVertexAttribArray(colAttr);
         gl.enableVertexAttribArray(normalAttr);
-        mat4.multiply(tmpMat, statueCF, objCF);   // tmp = ringCF * tmpMat
-        houses[1].draw(posAttr, normalAttr, modelUnif, tmpMat);
+        //mat4.multiply(tmpMat, statueCF, objCF);   // tmp = ringCF * tmpMat
+        obj2.draw(posAttr, normalAttr, modelUnif, statueCF);
     }
 
    // mat4.multiply(tmpMat, rockCF, objCF);   // tmp = ringCF * tmpMat
@@ -500,19 +504,31 @@ function draw3D() {
     gl.viewport(0, 0, glCanvas.width / 2, glCanvas.height);
 
  //   mat4.mul (tmpMat2, viewMat, housesCF[0]);
-    mat4.mul (tmpMat, viewMat, housesCF[1]);
+    mat4.mul (tmpMat, viewMat, obj);
+    mat4.mul (tmpMat2, viewMat, obj2);
     mat3.normalFromMat4 (normalMat, tmpMat);
+    mat3.normalFromMat4 (normalMat2, tmpMat2);
     gl.uniformMatrix3fv (normalUnif, false, normalMat);
+    gl.uniformMatrix3fv (normalUnif2, false, normalMat2);
     gl.viewport(0, 0, glCanvas.width/2, glCanvas.height);
     drawScene();
-    if (typeof houses !== 'undefined') {
+    if (typeof obj !== 'undefined') {
         gl.uniform1i(useLightingUnif, false);
         gl.disableVertexAttribArray(normalAttr);
         gl.enableVertexAttribArray(colAttr);
         if (showNormal)
-            obj.drawNormal(posAttr, colAttr, modelUnif, ringCF);
+            obj.drawNormal(posAttr, colAttr, modelUnif, pineappleCF);
         if (showLightVectors)
-            obj.drawVectorsTo(gl, lightPos, posAttr, colAttr, modelUnif, ringCF);
+            obj.drawVectorsTo(gl, lightPos, posAttr, colAttr, modelUnif, pineappleCF);
+    }
+    if (typeof obj2 !== 'undefined') {
+        gl.uniform1i(useLightingUnif, false);
+        gl.disableVertexAttribArray(normalAttr);
+        gl.enableVertexAttribArray(colAttr);
+        if (showNormal)
+            obj.drawNormal(posAttr, colAttr, modelUnif, statueCF);
+        if (showLightVectors)
+            obj.drawVectorsTo(gl, lightPos, posAttr, colAttr, modelUnif, statueCF);
     }
 }
 
@@ -521,18 +537,6 @@ function drawTopView() {
     gl.uniformMatrix4fv(projUnif, false, orthoProjMat);
     gl.uniformMatrix4fv(viewUnif, false, topViewMat);
     gl.viewport(glCanvas.width / 2, 0, glCanvas.width / 2, glCanvas.height);
-    drawScene();
-}
-
-function drawSideView() {
-    /* We must update the projection and view matrices in the shader */
-    gl.uniformMatrix4fv(projUnif, false, orthoProjMat);
-    gl.uniformMatrix4fv(viewUnif, false, sideViewMat);
-    gl.viewport(glCanvas.width / 2, 0, glCanvas.width / 2, glCanvas.height);
-    mat4.mul (tmpMat, topViewMat, ringCF);
-    mat3.normalFromMat4 (normalMat, tmpMat);
-    gl.uniformMatrix3fv (normalUnif, false, normalMat);
-    gl.viewport(glCanvas.width/2, 0, glCanvas.width/2, glCanvas.height);
     drawScene();
 }
 
