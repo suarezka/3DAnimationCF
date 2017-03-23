@@ -27,19 +27,19 @@ class Floor {
         let moveUpRoad = mat4.fromTranslation(mat4.create(), moveRoad);
         mat4.multiply(this.roadTransform, moveUpRoad, this.roadTransform);
 
-        let movePath = vec3.fromValues(0.75, 0, 0.01);
+        let movePath = vec3.fromValues(0.75, -1.5, 0.01);
         this.pathTransform = mat4.create();
         mat4.scale(this.pathTransform, this.pathTransform, vec3.fromValues(0.9, 0.1, 0.01));
         let moveUpPath = mat4.fromTranslation(mat4.create(), movePath);
         mat4.multiply(this.pathTransform, moveUpPath, this.pathTransform);
 
-        let movePath2 = vec3.fromValues(0.7, 2, 0.01);
+        let movePath2 = vec3.fromValues(0.7, 0, 0.01);
         this.pathTransform2 = mat4.create();
         mat4.scale(this.pathTransform2, this.pathTransform2, vec3.fromValues(1, 0.1, 0.01));
         let moveUpPath2 = mat4.fromTranslation(mat4.create(), movePath2);
         mat4.multiply(this.pathTransform2, moveUpPath2, this.pathTransform2);
 
-        let movePath3 = vec3.fromValues(0.7, 1, 0.01);
+        let movePath3 = vec3.fromValues(0.7, 1.5, 0.01);
         this.pathTransform3 = mat4.create();
         mat4.scale(this.pathTransform3, this.pathTransform3, vec3.fromValues(1, 0.1, 0.01));
         let moveUpPath3 = mat4.fromTranslation(mat4.create(), movePath3);

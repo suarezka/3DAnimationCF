@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="f5495991-527a-49b4-9f64-0cb0c74af5bc" name="Default" comment="" />
+=======
+    <list default="true" id="f5495991-527a-49b4-9f64-0cb0c74af5bc" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Floor.js" afterPath="$PROJECT_DIR$/Floor.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fshader.glsl" afterPath="$PROJECT_DIR$/fshader.glsl" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gl-main.js" afterPath="$PROJECT_DIR$/gl-main.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.html" afterPath="$PROJECT_DIR$/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/vshader.glsl" afterPath="$PROJECT_DIR$/vshader.glsl" />
+    </list>
+>>>>>>> origin/master
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -18,21 +29,78 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="287">
-              <caret line="73" column="18" lean-forward="false" selection-start-line="73" selection-start-column="14" selection-end-line="73" selection-end-column="18" />
+            <state relative-caret-position="391">
+              <caret line="107" column="6" lean-forward="false" selection-start-line="107" selection-start-column="6" selection-end-line="107" selection-end-column="6" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="gl-main.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Floor.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Floor.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="704">
+              <caret line="48" column="5" lean-forward="false" selection-start-line="48" selection-start-column="5" selection-end-line="48" selection-end-column="5" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="UniSphere.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/UniSphere.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="153">
+              <caret line="9" column="48" lean-forward="true" selection-start-line="9" selection-start-column="48" selection-end-line="9" selection-end-column="48" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="gl-main.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/gl-main.js">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="-1289">
               <caret line="397" column="60" lean-forward="false" selection-start-line="397" selection-start-column="60" selection-end-line="397" selection-end-column="60" />
+=======
+            <state relative-caret-position="3798">
+              <caret line="432" column="0" lean-forward="true" selection-start-line="432" selection-start-column="0" selection-end-line="432" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="fshader.glsl" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/fshader.glsl">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="136">
+              <caret line="8" column="1" lean-forward="false" selection-start-line="8" selection-start-column="1" selection-end-line="8" selection-end-column="1" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="gl-main.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../3DTransformations/gl-main.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2939">
+              <caret line="359" column="41" lean-forward="false" selection-start-line="359" selection-start-column="38" selection-end-line="359" selection-end-column="41" />
+              <folding>
+                <marker date="1490257789568" expanded="true" signature="14811:15036" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="vshader.glsl" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../3DTransformations/vshader.glsl">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+>>>>>>> origin/master
               <folding />
             </state>
           </provider>
@@ -58,6 +126,16 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="vshader.glsl" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/vshader.glsl">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="391">
+              <caret line="23" column="23" lean-forward="true" selection-start-line="23" selection-start-column="23" selection-end-line="23" selection-end-column="23" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
     </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
@@ -69,8 +147,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>ring</find>
-      <find>eyepos</find>
       <find>lightCF</find>
       <find>redrawNeeded</find>
       <find>eyexslider</find>
@@ -83,6 +159,24 @@
       <find>vertexNormal</find>
       <find>objCF</find>
       <find>obj</find>
+      <find>normalUnif</find>
+      <find>normalMat</find>
+      <find>normalInEye</find>
+      <find>normalMat2</find>
+      <find>eyePos</find>
+      <find>axes</find>
+      <find>vertexCol</find>
+      <find>rand</find>
+      <find>redslider</find>
+      <find>color</find>
+      <find>use</find>
+      <find>colAttr</find>
+      <find>mul</find>
+      <find>tmpMat</find>
+      <find>obj</find>
+      <find>varColor</find>
+      <find>col</find>
+      <find>uselighting</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -93,13 +187,14 @@
       <list>
         <option value="$PROJECT_DIR$/GeometricObject.js" />
         <option value="$PROJECT_DIR$/UniSphere.js" />
-        <option value="$PROJECT_DIR$/fshader.glsl" />
         <option value="$PROJECT_DIR$/Torus.js" />
         <option value="$PROJECT_DIR$/gl-main2.js" />
         <option value="$PROJECT_DIR$/index2.html" />
         <option value="$PROJECT_DIR$/vshader.glsl" />
-        <option value="$PROJECT_DIR$/index.html" />
+        <option value="$PROJECT_DIR$/fshader.glsl" />
         <option value="$PROJECT_DIR$/gl-main.js" />
+        <option value="$PROJECT_DIR$/Floor.js" />
+        <option value="$PROJECT_DIR$/index.html" />
       </list>
     </option>
   </component>
@@ -154,7 +249,7 @@
     <property name="JavaScriptWeakerCompletionTypeGuess" value="true" />
     <property name="settings.editor.splitter.proportion" value="0.27495107" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../3DTransformations/gl-main.js" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../3DTransformations" />
     <property name="HbShouldOpenHtmlAsHb" value="" />
     <property name="js.eslint.eslintPackage" value="" />
     <property name="nodejs_interpreter_path" value="C:/Program Files/nodejs/node" />
@@ -235,12 +330,17 @@
       <workItem from="1490112771626" duration="16992000" />
       <workItem from="1490198667914" duration="2566000" />
       <workItem from="1490210510653" duration="5399000" />
+<<<<<<< HEAD
       <workItem from="1490229298651" duration="6675000" />
       <workItem from="1490236331642" duration="755000" />
+=======
+      <workItem from="1490229298651" duration="17662000" />
+>>>>>>> origin/master
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
+<<<<<<< HEAD
     <option name="totallyTimeSpent" value="32864000" />
   </component>
   <component name="ToolWindowManager">
@@ -248,6 +348,15 @@
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21830986" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+=======
+    <option name="totallyTimeSpent" value="43096000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.09166667" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+>>>>>>> origin/master
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -494,14 +603,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/UniSphere.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="8" column="16" lean-forward="false" selection-start-line="8" selection-start-column="16" selection-end-line="8" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/PatrickHouse.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -510,6 +611,7 @@
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/fshader.glsl">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
@@ -517,6 +619,8 @@
         </state>
       </provider>
     </entry>
+=======
+>>>>>>> origin/master
     <entry file="file://$PROJECT_DIR$/GeometricObject.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
@@ -529,14 +633,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-707">
           <caret line="17" column="27" lean-forward="true" selection-start-line="17" selection-start-column="27" selection-end-line="17" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vshader.glsl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="612">
-          <caret line="36" column="61" lean-forward="false" selection-start-line="36" selection-start-column="49" selection-end-line="36" selection-end-column="61" />
           <folding />
         </state>
       </provider>
@@ -565,10 +661,65 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/../3DTransformations/fshader.glsl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="8" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fshader.glsl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="1" lean-forward="false" selection-start-line="8" selection-start-column="1" selection-end-line="8" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../3DTransformations/vshader.glsl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vshader.glsl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="23" column="23" lean-forward="true" selection-start-line="23" selection-start-column="23" selection-end-line="23" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/../3DTransformations/gl-main.js">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="555">
           <caret line="222" column="16" lean-forward="false" selection-start-line="222" selection-start-column="16" selection-end-line="222" selection-end-column="77" />
+=======
+        <state relative-caret-position="2939">
+          <caret line="359" column="41" lean-forward="false" selection-start-line="359" selection-start-column="38" selection-end-line="359" selection-end-column="41" />
+          <folding>
+            <marker date="1490257789568" expanded="true" signature="14811:15036" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/UniSphere.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="48" lean-forward="true" selection-start-line="9" selection-start-column="48" selection-end-line="9" selection-end-column="48" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Floor.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="704">
+          <caret line="48" column="5" lean-forward="false" selection-start-line="48" selection-start-column="5" selection-end-line="48" selection-end-column="5" />
+>>>>>>> origin/master
           <folding />
         </state>
       </provider>
@@ -583,8 +734,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/gl-main.js">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="-1289">
           <caret line="397" column="60" lean-forward="false" selection-start-line="397" selection-start-column="60" selection-end-line="397" selection-end-column="60" />
+=======
+        <state relative-caret-position="3798">
+          <caret line="432" column="0" lean-forward="true" selection-start-line="432" selection-start-column="0" selection-end-line="432" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="107" column="6" lean-forward="false" selection-start-line="107" selection-start-column="6" selection-end-line="107" selection-end-column="6" />
+>>>>>>> origin/master
           <folding />
         </state>
       </provider>
