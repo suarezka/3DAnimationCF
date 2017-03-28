@@ -28,43 +28,35 @@ var ambCoeffUnif, diffCoeffUnif, specCoeffUnif, shininessUnif;
 var lightPos, lightPos2, useLightingUnif;
 
 const IDENTITY = mat4.create();
-var obj, lineBuff, normBuff, objTint, pointLight;
-var shaderProg, redrawNeeded, showNormal, showLightVectors, showLight1, showLight2;
+var obj, lineBuff, normBuff, pointLight;
+var shaderProg, redrawNeeded, showNormal, showLightVectors;
 var lightingComponentEnabled = [true, true, true];
+var lightingComponentEnabled2 = [true, true, true];
 
 var coneSpinAngle;
-var obj2, obj3, floor;
+var floor;
 
 
 function main() {
 
     /* GET BUTTON VALUES */
-
-    let normalCheckBox = document.getElementById("shownormal");
-    normalCheckBox.addEventListener('change', ev => {
-        showNormal = ev.target.checked;
-        redrawNeeded = true;
-    }, false);
-
-    let lightCheckBox = document.getElementById("showlightvector");
-    lightCheckBox.addEventListener('change', ev => {
-        showLightVectors = ev.target.checked;
-        redrawNeeded = true;
-    }, false);
     let light1CheckBox = document.getElementById("showlight1");
     light1CheckBox.addEventListener('change', ev => {
-        showLight1 = ev.target.checked;
+        lightingComponentEnabled[0] = ev.target.checked;
+        lightingComponentEnabled[1] = ev.target.checked;
+        lightingComponentEnabled[2] = ev.target.checked;
         gl.uniform3iv (isEnabledUnif, lightingComponentEnabled);
         redrawNeeded = true;
     }, false);
 
     let light2CheckBox = document.getElementById("showlight2");
     light2CheckBox.addEventListener('change', ev => {
-        showLight2 = ev.target.checked;
-        gl.uniform3iv (isEnabledUnif, lightingComponentEnabled);
+        lightingComponentEnabled2[0] = ev.target.checked;
+        lightingComponentEnabled2[1] = ev.target.checked;
+        lightingComponentEnabled2[2] = ev.target.checked;
+        gl.uniform3iv (isEnabledUnif, lightingComponentEnabled2);
         redrawNeeded = true;
     }, false);
-
 
     let ambientCheckBox = document.getElementById("enableAmbient");
     ambientCheckBox.addEventListener('change', ev => {
@@ -89,25 +81,25 @@ function main() {
         gl.uniform1f(ambCoeffUnif, ev.target.value);
         redrawNeeded = true;
     }, false);
-    ambCoeffSlider.value = Math.random() * 0.2;
+    ambCoeffSlider.value = 0.2;
     let diffCoeffSlider = document.getElementById("diff-coeff");
     diffCoeffSlider.addEventListener('input', ev => {
         gl.uniform1f(diffCoeffUnif, ev.target.value);
         redrawNeeded = true;
     }, false);
-    diffCoeffSlider.value = 0.5 + 0.5 * Math.random();  // random in [0.5, 1.0]
+    diffCoeffSlider.value = 0.75;  // random in [0.5, 1.0]
     let specCoeffSlider = document.getElementById("spec-coeff");
     specCoeffSlider.addEventListener('input', ev => {
         gl.uniform1f(specCoeffUnif, ev.target.value);
         redrawNeeded = true;
     }, false);
-    specCoeffSlider.value = Math.random();
+    specCoeffSlider.value = 0.8;
     let shinySlider = document.getElementById("spec-shiny");
     shinySlider.addEventListener('input', ev => {
         gl.uniform1f(shininessUnif, ev.target.value);
         redrawNeeded = true;
     }, false);
-    shinySlider.value = Math.floor(1 + Math.random() * shinySlider.max);
+    shinySlider.value = 45;
 
     // let redSlider = document.getElementById("redslider");
     // let greenSlider = document.getElementById("greenslider");
@@ -161,7 +153,7 @@ function main() {
             colAttr = gl.getAttribLocation(prog, "vertexCol");
             normalAttr = gl.getAttribLocation(prog, "vertexNormal");
             lightPosUnif = gl.getUniformLocation(prog, "lightPosWorld");
-            //lightPosUnif2 = gl.getUniformLocation(prog, "lightPosWorld2");
+            lightPosUnif2 = gl.getUniformLocation(prog, "lightPosWorld2");
             projUnif = gl.getUniformLocation(prog, "projection");
             viewUnif = gl.getUniformLocation(prog, "view");
             modelUnif = gl.getUniformLocation(prog, "modelCF");
@@ -225,6 +217,9 @@ function main() {
                 lightPos[0], lightPos[1], lightPos[2], 1, 1, 1];
             gl.bindBuffer(gl.ARRAY_BUFFER, lineBuff);
             gl.bufferData(gl.ARRAY_BUFFER, Float32Array.from(vertices), gl.STATIC_DRAW);
+
+            lightPos2 = vec3.fromValues(0, 0, 2);
+            gl.uniform3fv (lightPosUnif2, lightPos2);
 
             gl.uniform1f(ambCoeffUnif, ambCoeffSlider.value);
             gl.uniform1f(diffCoeffUnif, diffCoeffSlider.value);
