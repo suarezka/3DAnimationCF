@@ -42,7 +42,6 @@ function main() {
     /* GET BUTTON VALUES */
     let light1CheckBox = document.getElementById("showlight1");
     light1CheckBox.addEventListener('change', ev => {
-        lightingComponentEnabled[0] = ev.target.checked;
         lightingComponentEnabled[1] = ev.target.checked;
         lightingComponentEnabled[2] = ev.target.checked;
         gl.uniform3iv (isEnabledUnif, lightingComponentEnabled);
@@ -52,8 +51,6 @@ function main() {
     let light2CheckBox = document.getElementById("showlight2");
     light2CheckBox.addEventListener('change', ev => {
         lightingComponentEnabled2[0] = ev.target.checked;
-        lightingComponentEnabled2[1] = ev.target.checked;
-        lightingComponentEnabled2[2] = ev.target.checked;
         gl.uniform3iv (isEnabledUnif, lightingComponentEnabled2);
         redrawNeeded = true;
     }, false);
@@ -81,7 +78,7 @@ function main() {
         gl.uniform1f(ambCoeffUnif, ev.target.value);
         redrawNeeded = true;
     }, false);
-    ambCoeffSlider.value = 0.2;
+    ambCoeffSlider.value = 1;
     let diffCoeffSlider = document.getElementById("diff-coeff");
     diffCoeffSlider.addEventListener('input', ev => {
         gl.uniform1f(diffCoeffUnif, ev.target.value);
