@@ -19,10 +19,6 @@ class Pineapple {
         let windowColor = vec3.fromValues(0.529412, 0.807843, 0.980392);
         let windowColor2 = vec3.fromValues(0.429412, 0.707843, 0.940392);
 
-        // Door Color
-        let doorColor = vec3.fromValues(0.745098, 0.745098, 0.745098);
-
-
         this.base = new Cylinder(gl, 0.20, 0.15, 0.2, 16, baseColor, baseColor2);
         this.top = new Cylinder(gl, 0.20, 0.15, 0.2, 16, baseColor, baseColor2);
         this.c1 = new Cone(gl, 0.12, 0.2, 15, 1, crownColor, crownColor2);
@@ -33,7 +29,7 @@ class Pineapple {
         this.window1 = new Ring(gl, 0.05, 0.025, 0.1, 10, 4, windowColor, windowColor2);
         this.window2 = new Ring(gl, 0.05, 0.025, 0.1, 10, 4, windowColor, windowColor2);
         this.door = new Cylinder(gl, 0.06, 0.06, 0.1, 10, pipeColor, pipeColor);
-        this.door2 = new Cube(gl, 0.12, 4, pipeColor, pipeColor, pipeColor);
+        this.door2 = new Cube(gl, 0.12, 4, pipeColor, pipeColor);
 
 
         //Repositioning for Base and Top
@@ -115,36 +111,47 @@ class Pineapple {
 
     draw (vertexAttr, colorAttr, modelUniform, coordFrame) {
         mat4.mul (this.tmp, coordFrame, this.baseTransform);
+        gl.uniform3fv(objTintUnif, vec3.fromValues(1.0, 1.0, 0.0));
         this.base.draw(vertexAttr, colorAttr, modelUniform, this.tmp);
 
         mat4.mul (this.tmp, coordFrame, this.topTransform);
+        gl.uniform3fv(objTintUnif, vec3.fromValues(1.0, 1.0, 0.0));
         this.top.draw(vertexAttr, colorAttr, modelUniform, this.tmp);
 
         mat4.mul (this.tmp, coordFrame, this.pipe1Transform);
+        gl.uniform3fv(objTintUnif, vec3.fromValues(0.117647, 0.564706, 1));
         this.pipe1.draw(vertexAttr, colorAttr, modelUniform, this.tmp);
 
         mat4.mul (this.tmp, coordFrame, this.pipe2Transform);
+        gl.uniform3fv(objTintUnif, vec3.fromValues(0.117647, 0.564706, 1));
         this.pipe2.draw(vertexAttr, colorAttr, modelUniform, this.tmp);
 
         mat4.mul (this.tmp, coordFrame, this.windowTransform);
+        gl.uniform3fv(objTintUnif, vec3.fromValues(0.529412, 0.807843, 0.980392));
         this.window1.draw(vertexAttr, colorAttr, modelUniform, this.tmp);
 
         mat4.mul (this.tmp, coordFrame, this.window2Transform);
+        gl.uniform3fv(objTintUnif, vec3.fromValues(0.529412, 0.807843, 0.980392));
         this.window2.draw(vertexAttr, colorAttr, modelUniform, this.tmp);
 
         mat4.mul (this.tmp, coordFrame, this.doorTransform);
+        gl.uniform3fv(objTintUnif, vec3.fromValues(0.529412, 0.807843, 0.980392));
         this.door.draw(vertexAttr, colorAttr, modelUniform, this.tmp);
 
         mat4.mul (this.tmp, coordFrame, this.door2Transform);
+        gl.uniform3fv(objTintUnif, vec3.fromValues(0.529412, 0.807843, 0.980392));
         this.door2.draw(vertexAttr, colorAttr, modelUniform, this.tmp);
 
         mat4.mul (this.tmp, coordFrame, this.c1Transform);
+        gl.uniform3fv(objTintUnif, vec3.fromValues(0.0, 0.392157, 0.0));
         this.c1.draw(vertexAttr, colorAttr, modelUniform, this.tmp);
 
         mat4.mul (this.tmp, coordFrame, this.c2Transform);
+        gl.uniform3fv(objTintUnif, vec3.fromValues(0.0, 0.392157, 0.0));
         this.c2.draw(vertexAttr, colorAttr, modelUniform, this.tmp);
 
         mat4.mul (this.tmp, coordFrame, this.c3Transform);
+        gl.uniform3fv(objTintUnif, vec3.fromValues(0.0, 0.392157, 0.0));
         this.c3.draw(vertexAttr, colorAttr, modelUniform, this.tmp);
 
 

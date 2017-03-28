@@ -1,7 +1,7 @@
 /**
  * Created by Hans Dulimarta on 2/1/17.
  */
-class Cube {
+class Cube extends GeometricObject{
     /**
      * Create a cube
      * @param {Object} gl      the current WebGL context
@@ -10,13 +10,13 @@ class Cube {
      * @param {vec3}   [col1]    color #1 to use
      * @param {vec3}   [col2]    color #2 to use
      */
-    constructor (gl, size, subDiv, col1, col2, col3) {
-
+    constructor (gl, size, subDiv) {
+        super(gl);
         /* if colors are undefined, generate random colors */
-        if (typeof col1 === "undefined") col1 = vec3.fromValues(Math.random(), Math.random(), Math.random());
-        if (typeof col2 === "undefined") col2 = vec3.fromValues(Math.random(), Math.random(), Math.random());
-        if (typeof col3 === "undefined") col3 = vec3.fromValues(Math.random(), Math.random(), Math.random());
-        let randColor = vec3.create();
+        // if (typeof col1 === "undefined") col1 = vec3.fromValues(Math.random(), Math.random(), Math.random());
+        // if (typeof col2 === "undefined") col2 = vec3.fromValues(Math.random(), Math.random(), Math.random());
+        // if (typeof col3 === "undefined") col3 = vec3.fromValues(Math.random(), Math.random(), Math.random());
+        // let randColor = vec3.create();
 
         this.vex = [
             vec3.fromValues(-size / 2, -size / 2, +size / 2),  // 0
@@ -28,21 +28,23 @@ class Cube {
             vec3.fromValues(+size / 2, +size / 2, -size / 2),  // 6
             vec3.fromValues(-size / 2, +size / 2, -size / 2)   // 7
         ];
-        this.color = [col1, col2, col3, col1, col2, col3, col1, col2];
+        // this.color = [col1, col2, col3, col1, col2, col3, col1, col2];
+        this.color = [];
 
         this.index = [];
 
-        this.split (subDiv, 0, 1, 2, 3, col1); /* top: Z+ */
-        this.split (subDiv, 0, 4, 5, 1, col2); /* front: Y- */
-        this.split (subDiv, 4, 7, 6, 5, col1); /* bottom: Z- */
-        this.split (subDiv, 2, 6, 7, 3, col2); /* back: Y+ */
-        this.split (subDiv, 1, 5, 6, 2, col3); /* right: X+ */
-        this.split (subDiv, 0, 3, 7, 4, col3); /* left: X- */
+        this.split (subDiv, 0, 1, 2, 3, vec3.fromValues(0,0,1)); /* top: Z+ */
+        this.split (subDiv, 0, 4, 5, 1, vec3.fromValues(0,-1,0)); /* front: Y- */
+        this.split (subDiv, 4, 7, 6, 5, vec3.fromValues(0,0,-1)); /* bottom: Z- */
+        this.split (subDiv, 2, 6, 7, 3, vec3.fromValues(0,1,0)); /* back: Y+ */
+        this.split (subDiv, 1, 5, 6, 2, vec3.fromValues(1,0,0)); /* right: X+ */
+        this.split (subDiv, 0, 3, 7, 4, vec3.fromValues(-1,0,0)); /* left: X- */
         let vertices = [];
         for (let k = 0; k < this.vex.length; k++)
         {
             vertices.push(this.vex[k][0], this.vex[k][1], this.vex[k][2]);
-            vertices.push(this.color[k][0], this.color[k][1], this.color[k][2]);
+            vertices.push(this.vex[k][0], this.vex[k][1], this.vex[k][2]);
+            // vertices.push(this.color[k][0], this.color[k][1], this.color[k][2]);
             // vec3.lerp (randColor, col1, col2, Math.random()); /* linear interpolation between two colors */
             // vertices.push(randColor[0], randColor[1], randColor[2]);
         }
@@ -52,7 +54,7 @@ class Cube {
 
         let ibuff = gl.createBuffer();
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibuff);
-        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, Uint16Array.from(this.index), gl.STATIC_DRAW)
+        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, Uint16Array.from(this.index), gl.STATIC_DRAW);
         this.indices = [{primitive: gl.TRIANGLES, buffer: ibuff, numPoints: this.index.length}];
     }
 

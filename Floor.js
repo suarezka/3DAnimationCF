@@ -4,14 +4,14 @@
 
 class Floor {
     constructor (gl) {
-        let baseColor = vec3.fromValues(156.0/255, 180.0/255, 158.0/255);
+        let baseColor = vec3.fromValues(170.0/255, 195.0/255, 138.0/255);
         let baseColor2 = vec3.fromValues(60.0/255, 60.0/255, 60.0/255);
 
-        this.base = new Cube(gl, 1, 4, baseColor, baseColor, baseColor);
-        this.road = new Cube(gl, 1, 4, baseColor2, baseColor2, baseColor2);
-        this.path = new Cube(gl, 1, 4, baseColor2, baseColor2, baseColor2);
-        this.path2 = new Cube(gl, 1, 4, baseColor2, baseColor2, baseColor2);
-        this.path3 = new Cube(gl, 1, 4, baseColor2, baseColor2, baseColor2);
+        this.base = new Cube(gl, 1, 6, baseColor, baseColor, baseColor);
+        this.road = new Cube(gl, 1, 2, baseColor2, baseColor2, baseColor2);
+        this.path = new Cube(gl, 1, 2, baseColor2, baseColor2, baseColor2);
+        this.path2 = new Cube(gl, 1, 2, baseColor2, baseColor2, baseColor2);
+        this.path3 = new Cube(gl, 1, 2, baseColor2, baseColor2, baseColor2);
 
         // Base
         let move = vec3.fromValues(0, 0, 0);
@@ -49,9 +49,11 @@ class Floor {
     }
     draw (vertexAttr, colorAttr, modelUniform, coordFrame) {
         mat4.mul (this.tmp, coordFrame, this.baseTransform);
+        gl.uniform3fv(objTintUnif, vec3.fromValues(156.0/255, 180.0/255, 158.0/255));
         this.base.draw(vertexAttr, colorAttr, modelUniform, this.tmp);
 
         mat4.mul (this.tmp, coordFrame, this.roadTransform);
+        gl.uniform3fv(objTintUnif, vec3.fromValues(60.0/255, 60.0/255, 60.0/255));
         this.road.draw(vertexAttr, colorAttr, modelUniform, this.tmp);
 
         mat4.mul (this.tmp, coordFrame, this.pathTransform);

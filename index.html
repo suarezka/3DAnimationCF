@@ -6,6 +6,7 @@
   <script src="webgl-utils.js"></script>
   <script src="shader-utils.js"></script>
   <script src="gl-matrix-min.js"></script>
+  <script src="GeometricObject.js"></script>
   <script src="Axes.js"></script>
   <script src="Cone.js"></script>
   <script src="Cylinder.js"></script>
@@ -17,7 +18,6 @@
   <script src="PatrickHouse.js"></script>
   <script src="Floor.js"></script>
   <script src="Torus.js"></script>
-  <script src="GeometricObject.js"></script>
   <script src="UniSphere.js"></script>
   <script src="gl-main3.js"></script>
   <style>
@@ -106,12 +106,6 @@
   <span>Shininess: <input id="spec-shiny" type="range" min="1" max="128" step="1">
     </span>
 </div>
-  <div class="sliderGroup">
-    Object Tint
-    <span>R: <input id="redslider" type="range" min="0" max="1" step="0.02"></span>
-    <span>G: <input id="greenslider" type="range" min="0" max="1" step="0.02"></span>
-    <span>B: <input id="blueslider" type="range" min="0" max="1" step="0.02"></span>
-  </div>
 <div id="objcontrol" class="sliderGroup">
   Object Position
   <span>X: <input id="objx" type="range" min="-3" max="3" step="0.05"></span>

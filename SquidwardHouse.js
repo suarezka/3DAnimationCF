@@ -87,27 +87,35 @@ class SquidwardHouse {
 
     draw (vertexAttr, colorAttr, modelUniform, coordFrame) {
         mat4.mul (this.tmp, coordFrame, this.baseTransform);
+        gl.uniform3fv(objTintUnif, vec3.fromValues(23.0/255, 70.0/255, 144.0/255));
         this.base.draw(vertexAttr, colorAttr, modelUniform, this.tmp);
 
         mat4.mul (this.tmp, coordFrame, this.noseTransform);
+        gl.uniform3fv(objTintUnif, vec3.fromValues(23.0/255, 70.0/255, 144.0/255));
         this.nose.draw(vertexAttr, colorAttr, modelUniform, this.tmp);
 
         mat4.mul (this.tmp, coordFrame, this.earsTransform);
+        gl.uniform3fv(objTintUnif, vec3.fromValues(23.0/255, 70.0/255, 144.0/255));
         this.ears.draw(vertexAttr, colorAttr, modelUniform, this.tmp);
 
         mat4.mul (this.tmp, coordFrame, this.windowTransform);
+        gl.uniform3fv(objTintUnif, vec3.fromValues(0.529412, 0.807843, 0.980392));
         this.window1.draw(vertexAttr, colorAttr, modelUniform, this.tmp);
 
         mat4.mul (this.tmp, coordFrame, this.window2Transform);
+        gl.uniform3fv(objTintUnif, vec3.fromValues(0.529412, 0.807843, 0.980392));
         this.window2.draw(vertexAttr, colorAttr, modelUniform, this.tmp);
 
         mat4.mul (this.tmp, coordFrame, this.browTransform);
+        gl.uniform3fv(objTintUnif, vec3.fromValues(23.0/255, 70.0/255, 144.0/255));
         this.brow.draw(vertexAttr, colorAttr, modelUniform, this.tmp);
 
         mat4.mul (this.tmp, coordFrame, this.doorTransform);
+        gl.uniform3fv(objTintUnif, vec3.fromValues(150.0/255, 109.0/255, 52.0/255));
         this.door.draw(vertexAttr, colorAttr, modelUniform, this.tmp);
 
         mat4.mul (this.tmp, coordFrame, this.door2Transform);
+        gl.uniform3fv(objTintUnif, vec3.fromValues(150.0/255, 109.0/255, 52.0/255));
         this.door2.draw(vertexAttr, colorAttr, modelUniform, this.tmp);
     }
 }

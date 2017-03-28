@@ -7,7 +7,7 @@ class PatrickHouse {
         let baseColor = vec3.fromValues(30.0/255, 30.0/255, 30.0/255);
         let rodColor = vec3.fromValues(200/255, 200/255, 0);
 
-        this.base = new Sphere(gl, 0.3, 20, 10, baseColor, baseColor);
+        this.base = new UniSphere(gl, 0.3, 4);
         this.rod = new Cylinder(gl, 0.012, 0.012, 0.2, 8, rodColor, rodColor);
         this.rod2 = new Cylinder(gl, 0.012, 0.012, 0.18, 8, rodColor, rodColor);
         this.rod3 = new Cone(gl, 0.025, 0.035, 8, 1, rodColor, rodColor);
@@ -41,9 +41,11 @@ class PatrickHouse {
         this.tmp = mat4.create();
     }
     draw (vertexAttr, colorAttr, modelUniform, coordFrame) {
+        gl.uniform3fv(objTintUnif, vec3.fromValues(30.0/255, 30.0/255, 30.0/255));
         this.base.draw(vertexAttr, colorAttr, modelUniform, coordFrame);
 
         mat4.mul (this.tmp, coordFrame, this.rodTransform);
+        gl.uniform3fv(objTintUnif, vec3.fromValues(200/255, 200/255, 0));
         this.rod.draw(vertexAttr, colorAttr, modelUniform, this.tmp);
 
         mat4.mul (this.tmp, coordFrame, this.rod2Transform);
